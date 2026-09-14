@@ -1,5 +1,5 @@
 import { getState, setState, resetGame } from '@/lib/store';
-import { QUESTIONS, TIME_LIMIT_MS } from '@/lib/questions';
+import { QUESTIONS, timeLimitForIndex } from '@/lib/questions';
 
 export async function POST(request) {
   const { action } = await request.json();
@@ -15,7 +15,11 @@ export async function POST(request) {
       // idempotentní: víc zařízení (host i hráči) může tuhle akci "navrhnout" ve
       // stejnou chvíli, projde jen ta první, ostatní jsou no-op
       if (state.phase !== 'countdown') return Response.json(state);
-      const next = await setState({ phase: 'question', startedAt: Date.now(), timeLimitMs: TIME_LIMIT_MS });
+      const next = await setState({
+        phase: 'question',
+        startedAt: Date.now(),
+        timeLimitMs: timeLimitForIndex(state.questionIndex),
+      });
       return Response.json(next);
     }
     case 'reveal': {
