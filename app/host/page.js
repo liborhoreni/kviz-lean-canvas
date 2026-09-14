@@ -4,6 +4,8 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { burstConfetti } from '@/lib/confetti';
 import { playersLabel } from '@/lib/pluralize';
+import { useAutoAdvance } from '@/lib/useAutoAdvance';
+import CountdownView from '@/components/CountdownView';
 
 const TILE_CLASSES = ['tile-0', 'tile-1', 'tile-2'];
 const LETTERS = ['A', 'B', 'C'];
@@ -13,7 +15,6 @@ export default function HostPage() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [now, setNow] = useState(Date.now());
   const [joinUrl, setJoinUrl] = useState('');
-  const revealedForRef = useRef(-1);
   const confettiPhaseRef = useRef(null);
   const canvasRef = useRef(null);
 
@@ -63,20 +64,10 @@ export default function HostPage() {
     await refresh();
   }
 
-  // auto-reveal, jednou, jakmile vyprší čas
-  useEffect(() => {
-    if (phase !== 'question' || !data?.state?.startedAt) return;
-    const remaining = data.state.timeLimitMs - (now - data.state.startedAt);
-    if (remaining <= 0 && revealedForRef.current !== data.state.questionIndex) {
-      revealedForRef.current = data.state.questionIndex;
-      callHost('reveal');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [phase, now, data?.state?.startedAt, data?.state?.questionIndex]);
+  useAutoAdvance(data, now);
 
   function handleReset() {
     if (window.confirm('Opravdu resetovat hru? Smaže se skóre i seznam hráčů.')) {
-      revealedForRef.current = -1;
       confettiPhaseRef.current = null;
       callHost('reset');
     }
@@ -105,6 +96,8 @@ export default function HostPage() {
           <Lobby data={data} joinUrl={joinUrl} onStart={() => callHost('start')} />
         )}
 
+        {data && phase === 'countdown' && <CountdownView data={data} now={now} />}
+
         {data && phase === 'question' && <QuestionView data={data} now={now} />}
 
         {data && phase === 'reveal' && (
@@ -112,14 +105,7 @@ export default function HostPage() {
         )}
 
         {data && phase === 'leaderboard' && (
-          <LeaderboardView
-            leaderboard={leaderboard}
-            data={data}
-            onNext={() => {
-              revealedForRef.current = -1;
-              callHost('next');
-            }}
-          />
+          <LeaderboardView leaderboard={leaderboard} data={data} onNext={() => callHost('next')} />
         )}
 
         {data && phase === 'end' && <EndView leaderboard={leaderboard} onReset={handleReset} />}
@@ -234,7 +220,7 @@ function RevealView({ data, onNext }) {
         })}
       </div>
       <button className="btn btn-teal btn-lg" onClick={onNext}>
-        🏆 Zobrazit žebříček
+        🏆 Zobrazit žebříček hned
       </button>
     </>
   );

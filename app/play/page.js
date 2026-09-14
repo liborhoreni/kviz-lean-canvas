@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { shuffledAvatars } from '@/lib/avatars';
 import { burstConfetti } from '@/lib/confetti';
 import { playersLabel } from '@/lib/pluralize';
+import CountdownView from '@/components/CountdownView';
+import { useAutoAdvance } from '@/lib/useAutoAdvance';
 
 const TILE_CLASSES = ['tile-0', 'tile-1', 'tile-2'];
 const LETTERS = ['A', 'B', 'C'];
@@ -73,6 +75,8 @@ export default function PlayPage() {
 
   const phase = data?.state?.phase;
 
+  useAutoAdvance(data, now);
+
   const refreshLeaderboard = useCallback(async () => {
     const res = await fetch('/api/leaderboard', { cache: 'no-store' });
     const json = await res.json();
@@ -124,6 +128,8 @@ export default function PlayPage() {
         {!data && <p className="subtitle">Připojuji se ke hře…</p>}
 
         {data && phase === 'lobby' && <PlayerLobby player={player} data={data} />}
+
+        {data && phase === 'countdown' && <CountdownView data={data} now={now} />}
 
         {data && phase === 'question' && (
           <PlayerQuestion data={data} now={now} answering={answering} onAnswer={submitAnswer} />
