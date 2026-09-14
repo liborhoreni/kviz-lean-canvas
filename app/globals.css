@@ -529,17 +529,40 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  padding: 14px 8px;
+  justify-content: flex-start;
+  padding: 16px 8px 14px;
   gap: 6px;
   font-weight: 800;
   text-align: center;
   box-shadow: var(--shadow);
 }
+.podium-rank {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
 .podium-step .em { font-size: 34px; }
-.podium-1 { height: 190px; background: linear-gradient(180deg, var(--gold), var(--gold-deep)); color: #3a2a00; order: 2; }
-.podium-2 { height: 150px; background: linear-gradient(180deg, #e7e2ee, var(--lavender)); color: var(--ink); order: 1; }
-.podium-3 { height: 120px; background: linear-gradient(180deg, var(--blue), var(--blue-deep)); color: white; order: 3; }
+.podium-name {
+  font-size: 15px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.podium-score {
+  font-family: var(--font-display);
+  font-size: 15px;
+  opacity: 0.85;
+}
+.podium-1 { height: 230px; background: linear-gradient(180deg, var(--gold), var(--gold-deep)); color: #3a2a00; order: 2; }
+.podium-2 { height: 190px; background: linear-gradient(180deg, #e7e2ee, var(--lavender)); color: var(--ink); order: 1; }
+.podium-3 { height: 160px; background: linear-gradient(180deg, var(--blue), var(--blue-deep)); color: white; order: 3; }
 
 .canvas-confetti {
   position: fixed;

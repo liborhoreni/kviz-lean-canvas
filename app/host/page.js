@@ -82,7 +82,7 @@ export default function HostPage() {
 
       <div className="host-topbar">
         <span className="eyebrow" style={{ fontSize: 15 }}>
-          🎓 Lean Canvas Kvíz · lektor
+          Workshop Lean Canvas
         </span>
         <button className="btn btn-danger" onClick={handleReset}>
           Resetovat hru
@@ -262,9 +262,10 @@ function EndView({ leaderboard, onReset }) {
         <div className="podium">
           {top3.map((p, i) => (
             <div className={`podium-step podium-${i + 1}`} key={p.id}>
+              <span className="podium-rank">{i + 1}.</span>
               <span className="em">{p.avatar}</span>
-              <span>{p.name}</span>
-              <span>{p.score} b.</span>
+              <span className="podium-name">{p.name}</span>
+              <span className="podium-score">{p.score} b.</span>
             </div>
           ))}
         </div>
