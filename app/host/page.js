@@ -6,7 +6,7 @@ import { burstConfetti } from '@/lib/confetti';
 import { playersLabel } from '@/lib/pluralize';
 
 const TILE_CLASSES = ['tile-0', 'tile-1', 'tile-2'];
-const SHAPES = ['shape-triangle', 'shape-diamond', 'shape-circle'];
+const LETTERS = ['A', 'B', 'C'];
 
 export default function HostPage() {
   const [data, setData] = useState(null);
@@ -181,6 +181,7 @@ function QuestionView({ data, now }) {
       <div className="card">
         <h2 style={{ fontSize: 'clamp(22px, 3.4vw, 34px)', textAlign: 'center' }}>{q.q}</h2>
       </div>
+      {q.note && <p className="question-note">⚠️ {q.note}</p>}
 
       <div className="progress-track">
         <div
@@ -193,9 +194,7 @@ function QuestionView({ data, now }) {
       <div className="answers-grid" data-count={q.choices.length}>
         {q.choices.map((c, i) => (
           <div className={`answer-tile ${TILE_CLASSES[i]}`} key={i}>
-            <span className="tile-shape">
-              <span className={SHAPES[i]} />
-            </span>
+            <span className="tile-badge">{LETTERS[i]}</span>
             {c}
           </div>
         ))}
@@ -225,9 +224,7 @@ function RevealView({ data, onNext }) {
               className={`answer-tile ${TILE_CLASSES[i]} ${isCorrect ? 'correct' : 'dim'}`}
               key={i}
             >
-              <span className="tile-shape">
-                <span className={SHAPES[i]} />
-              </span>
+              <span className="tile-badge">{LETTERS[i]}</span>
               <span style={{ flex: 1 }}>{c}</span>
               <span className="pill" style={{ color: 'inherit', background: 'rgba(0,0,0,0.18)' }}>
                 {data.answerCounts?.[i] ?? 0}× {isCorrect ? '✅' : ''}

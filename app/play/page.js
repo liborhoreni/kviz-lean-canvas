@@ -6,7 +6,7 @@ import { burstConfetti } from '@/lib/confetti';
 import { playersLabel } from '@/lib/pluralize';
 
 const TILE_CLASSES = ['tile-0', 'tile-1', 'tile-2'];
-const SHAPES = ['shape-triangle', 'shape-diamond', 'shape-circle'];
+const LETTERS = ['A', 'B', 'C'];
 const STORAGE_KEY = 'leancanvas_quiz_player';
 
 function loadStoredPlayer() {
@@ -250,6 +250,7 @@ function PlayerQuestion({ data, now, answering, onAnswer }) {
       <div className="card">
         <h2 style={{ fontSize: 'clamp(18px, 4vw, 24px)', textAlign: 'center' }}>{q.q}</h2>
       </div>
+      {q.note && <p className="question-note">⚠️ {q.note}</p>}
 
       {alreadyAnswered ? (
         <div className="status-banner neutral">Odpověď odeslána ✅ Čekej na vyhodnocení…</div>
@@ -264,9 +265,7 @@ function PlayerQuestion({ data, now, answering, onAnswer }) {
               disabled={answering}
               onClick={() => onAnswer(i)}
             >
-              <span className="tile-shape">
-                <span className={SHAPES[i]} />
-              </span>
+              <span className="tile-badge">{LETTERS[i]}</span>
               {c}
             </button>
           ))}
@@ -298,9 +297,7 @@ function PlayerReveal({ data }) {
           const isCorrect = i === q.correct;
           return (
             <div key={i} className={`answer-tile ${TILE_CLASSES[i]} ${isCorrect ? 'correct' : 'dim'}`}>
-              <span className="tile-shape">
-                <span className={SHAPES[i]} />
-              </span>
+              <span className="tile-badge">{LETTERS[i]}</span>
               <span>{c}</span>
             </div>
           );
