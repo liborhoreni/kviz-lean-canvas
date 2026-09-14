@@ -251,6 +251,8 @@ function LeaderboardView({ leaderboard, data, onNext }) {
   );
 }
 
+const MEDALS = ['gold', 'silver', 'bronze'];
+
 function EndView({ leaderboard, onReset }) {
   const top3 = leaderboard.slice(0, 3);
   return (
@@ -262,9 +264,9 @@ function EndView({ leaderboard, onReset }) {
         <div className="podium">
           {top3.map((p, i) => (
             <div className={`podium-step podium-${i + 1}`} key={p.id}>
-              <span className="podium-rank">{i + 1}.</span>
-              <span className="em">{p.avatar}</span>
               <span className="podium-name">{p.name}</span>
+              <span className={`podium-medal ${MEDALS[i]}`}>{i + 1}</span>
+              <span className="em">{p.avatar}</span>
               <span className="podium-score">{p.score} b.</span>
             </div>
           ))}
